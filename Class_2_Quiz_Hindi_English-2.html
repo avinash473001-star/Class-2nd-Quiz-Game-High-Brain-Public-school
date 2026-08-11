@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>High Brain Public School - Class 2 Quiz</title>
+<style>
+body{font-family:Arial,sans-serif;background:linear-gradient(135deg,#eaf7ff,#fff7d6);margin:0;padding:18px;color:#17324d}
+.card{max-width:650px;margin:auto;background:#fff;border-radius:22px;padding:22px;box-shadow:0 8px 25px #0002}
+h1{text-align:center;color:#1456a0;margin:5px 0}.sub{text-align:center;color:#666}
+.lang{display:flex;gap:10px;margin:20px 0}.lang button{flex:1;background:#eef5ff;color:#1456a0;border:2px solid #c9ddf5}
+button{padding:12px;border:0;border-radius:12px;font-size:17px;font-weight:bold;cursor:pointer}
+.lang button.active{background:#1456a0;color:white}
+.q{background:#f5f9ff;padding:15px;margin:14px 0;border-radius:15px}
+label{display:block;background:white;margin:7px 0;padding:10px;border-radius:10px;border:1px solid #dde7f2;cursor:pointer}
+.submit{width:100%;background:#1456a0;color:white}
+#result{text-align:center;font-size:20px;font-weight:bold;margin-top:18px}
+.game{margin-top:25px;background:#fff8df;padding:18px;border-radius:15px}
+.emoji{text-align:center;font-size:40px}
+</style>
+</head>
+<body>
+<div class="card">
+<h1>🎓 High Brain Public School</h1>
+<div class="sub" id="subtitle">🌟 Class 2 – Fun Quiz 🌟</div>
+
+<div class="lang">
+<button id="enBtn" class="active" onclick="setLang('en')">🇬🇧 English</button>
+<button id="hiBtn" onclick="setLang('hi')">🇮🇳 हिंदी</button>
+</div>
+
+<form id="quiz"></form>
+<button class="submit" id="submitBtn" onclick="checkQuiz()" type="button">✨ Submit Quiz ✨</button>
+<div id="result"></div>
+
+<div class="game">
+<h2 id="gameTitle">🎨 Creative Game: Guess the Emoji!</h2>
+<div class="emoji">🌞 + 🌻</div>
+<p id="gameText"><b>Make a sentence using these emojis.</b></p>
+<p id="example">Example: “The sun shines on the flower.” ☀️🌻</p>
+</div>
+</div>
+
+<script>
+let lang='en';
+const data={
+en:[
+["How many days are there in a week?",["5","7","10"],1],
+["Which animal says “Moo”?",["🐄 Cow","🐱 Cat","🐶 Dog"],0],
+["What is 5 + 3?",["6","8","9"],1],
+["Which one is a fruit?",["🍎 Apple","🥕 Carrot","🥔 Potato"],0],
+["What should we say when someone helps us?",["Goodbye","Thank you","Sorry"],1]
+],
+hi:[
+["एक सप्ताह में कितने दिन होते हैं?",["5","7","10"],1],
+["“Moo” की आवाज़ कौन-सा जानवर करता है?",["🐄 गाय","🐱 बिल्ली","🐶 कुत्ता"],0],
+["5 + 3 कितना होता है?",["6","8","9"],1],
+["इनमें से फल कौन-सा है?",["🍎 सेब","🥕 गाजर","🥔 आलू"],0],
+["जब कोई हमारी मदद करे तो हमें क्या कहना चाहिए?",["अलविदा","धन्यवाद","माफ़ कीजिए"],1]
+]};
+function render(){
+ document.getElementById('quiz').innerHTML=data[lang].map((x,i)=>`
+ <div class="q"><b>${i+1}. ${x[0]}</b>
+ ${x[1].map((o,j)=>`<label><input type="radio" name="q${i}" value="${j}"> ${o}</label>`).join('')}</div>`).join('');
+ document.getElementById('submitBtn').textContent=lang==='en'?'✨ Submit Quiz ✨':'✨ क्विज़ जमा करें ✨';
+ document.getElementById('gameTitle').textContent=lang==='en'?'🎨 Creative Game: Guess the Emoji!':'🎨 क्रिएटिव गेम: इमोजी से पहचानो!';
+ document.getElementById('gameText').innerHTML=lang==='en'?'<b>Make a sentence using these emojis.</b>':'<b>इन इमोजी का उपयोग करके एक वाक्य बनाओ।</b>';
+ document.getElementById('example').textContent=lang==='en'?'Example: “The sun shines on the flower.” ☀️🌻':'उदाहरण: “सूरज फूल पर चमक रहा है।” ☀️🌻';
+}
+function setLang(l){
+ lang=l; document.getElementById('enBtn').classList.toggle('active',l==='en'); document.getElementById('hiBtn').classList.toggle('active',l==='hi'); document.getElementById('result').innerHTML=''; render();
+}
+function checkQuiz(){
+ let score=0;
+ data[lang].forEach((x,i)=>{let a=document.querySelector('input[name="q'+i+'"]:checked');if(a && Number(a.value)===x[2])score++;});
+ let msg=lang==='en'?(score===5?'🏆 Excellent! Perfect Score!':score>=3?'👏 Very Good! Keep Learning!':'🌟 Good Try! Practice and try again!'):(score===5?'🏆 बहुत बढ़िया! पूरे अंक!':score>=3?'👏 बहुत अच्छा! सीखते रहो!':'🌟 अच्छा प्रयास! फिर से कोशिश करो!');
+ document.getElementById('result').innerHTML=(lang==='en'?'Your Score: ':'आपका स्कोर: ')+score+'/5<br>'+msg;
+}
+render();
+</script>
+</body>
+</html>
